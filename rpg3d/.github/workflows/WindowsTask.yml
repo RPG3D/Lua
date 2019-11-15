@@ -1,0 +1,45 @@
+name: WindowsTask
+
+on:
+  push:
+    branches:
+      - rpg3d
+    paths:
+      - '**.lua'
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+    
+    steps:
+      
+    - uses: actions/checkout@v1
+    
+
+    - uses: xmake-io/github-action-setup-xmake@v1
+      with:
+        xmake-version: '2.2.8'
+    
+    - name: BuildWindows
+      run: |
+        cd rpg3d
+        BuildWindows.bat
+      
+    - name: BuildAndroid
+      run: BuildAndroid.bat
+      
+      
+    - name: CommitBinaries
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git config user.email "imxqliu@live.com"
+        git config user.name "%GITHUB_ACTOR%"
+        git checkout rpg3d
+        git pull origin rpg3d
+        git add build/windows/*
+        git add build/android/*
+        git commit -m "[%GITHUB_WORKFLOW%]Auto commit from Github Action"
+        git remote set-url --push origin https://%GITHUB_ACTOR%:%GITHUB_TOKEN%@github.com/%GITHUB_REPOSITORY%
+        git push origin rpg3d
