@@ -13,8 +13,13 @@ target("Lua")
 
 	add_headerfiles("../*.h")
 
-	if ("$(mode)" == "debug") then
+	add_rules("mode.debug", "mode.release")
+
+	if is_mode("debug") then
 		set_symbols("debug")
+		set_optimize("none")
+	else
+		set_optimize("fastest")
 	end
 
 	if (is_os("windows")) then
@@ -43,10 +48,15 @@ target("LuaMain")
 	
 	set_languages("c11", "cxx14")
 	
+	add_rules("mode.debug", "mode.release")
+
 	add_defines("LUA_BUILD_AS_DLL=1")
 
-	if ("$(mode)" == "debug") then
+	if is_mode("debug") then
 		set_symbols("debug")
+		set_optimize("none")
+	else
+		set_optimize("fastest")
 	end
 	
 	if (is_os("windows")) == false then
