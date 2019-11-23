@@ -13,6 +13,10 @@ target("Lua")
 
 	add_headerfiles("../*.h")
 
+	if ("$(mode)" == "debug") then
+		set_symbols("debug")
+	end
+
 	if (is_os("windows")) then
 		add_defines("LUA_BUILD_AS_DLL=1")
 	end
@@ -34,13 +38,17 @@ target("LuaMain")
 
 	add_headerfiles("../*.h")
 	
-	add_linkdirs("build/windows/x64/release")
+	add_linkdirs("build/$(os)/$(arch)/$(mode)")
 	add_links("Lua")
 	
 	set_languages("c11", "cxx14")
 	
 	add_defines("LUA_BUILD_AS_DLL=1")
 
+	if ("$(mode)" == "debug") then
+		set_symbols("debug")
+	end
+	
 	if (is_os("windows")) == false then
 		set_enabled(false)
 	end
