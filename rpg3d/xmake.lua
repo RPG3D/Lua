@@ -4,7 +4,7 @@ target("Lua")
 	set_kind("shared")
 	
 
-	set_languages("c11", "cxx14")
+	set_languages("c89", "cxx14")
 	
 	add_files("../*.c")
 	del_files("../lua.c")
@@ -23,7 +23,6 @@ target("Lua")
 	end
 
 	if (is_os("windows")) then
-		add_cxflags("/TC", {force = true})
 		add_defines("LUA_BUILD_AS_DLL=1")
 	end
 	
@@ -47,12 +46,11 @@ target("LuaMain")
 	add_linkdirs("build/$(os)/$(arch)/$(mode)")
 	add_links("Lua")
 	
-	set_languages("c11", "cxx14")
+	set_languages("c89", "cxx14")
 
 	add_rules("mode.debug", "mode.release")
 
 	if (is_os("windows")) then
-		add_cxflags("/TC", {force = true})
 		add_defines("LUA_BUILD_AS_DLL=1")
 	end
 
