@@ -30,6 +30,10 @@ target("Lua")
 	if (is_os("android")) then
 		add_defines("lua_getlocaledecpoint()=46")		
 		add_defines("ANDROID_STL=gnustl_shared")
+		
+		--if (is_arch("x86_64")) then
+			add_links("m")
+		--end
 	end
 
 	if (is_os("ios")) then
