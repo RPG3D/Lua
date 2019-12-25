@@ -1004,7 +1004,7 @@ static int str_gsub (lua_State *L) {
 ** to nibble boundaries by making what is left after that first digit a
 ** multiple of 4.
 */
-#define L_NBFD		((l_mathlim(MANT_DIG) - 1)%4 + 1)
+#define L_NBFD		((l_floatatt(MANT_DIG) - 1)%4 + 1)
 
 
 /*
@@ -1072,7 +1072,7 @@ static int lua_number2strx (lua_State *L, char *buff, int sz,
 ** and '\0') + number of decimal digits to represent maxfloat (which
 ** is maximum exponent + 1). (99+3+1, adding some extra, 110)
 */
-#define MAX_ITEMF	(110 + l_mathlim(MAX_10_EXP))
+#define MAX_ITEMF	(110 + l_floatatt(MAX_10_EXP))
 
 
 /*
@@ -1271,6 +1271,8 @@ static int str_format (lua_State *L) {
         }
         case 'p': {
           const void *p = lua_topointer(L, arg);
+          if (p == NULL)
+            p = "(null)";  /* NULL not a valid parameter in ISO C 'printf' */
           nb = l_sprintf(buff, maxitem, form, p);
           break;
         }
